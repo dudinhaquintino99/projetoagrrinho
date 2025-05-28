@@ -1,1 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Conexão Sustentável</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Conexão Sustentável 🌱</h1>
+    <div id="game"></div>
+    <div class="result" id="result"></div>
+  </div>
+
+  <script>
+    const questions = [
+      {
+        text: "Na cidade, como você pode ajudar a reduzir a poluição?",
+        options: [
+          { text: "Usar transporte público ou bicicleta", correct: true },
+          { text: "Andar de carro sozinho sempre", correct: false }
+        ]
+      },
+      {
+        text: "No campo, qual prática ajuda a sustentabilidade?",
+        options: [
+          { text: "Queimar restos de plantações", correct: false },
+          { text: "Fazer compostagem e rotação de culturas", correct: true }
+        ]
+      },
+      {
+        text: "Como a cidade pode apoiar o campo de forma sustentável?",
+        options: [
+          { text: "Comprar produtos locais e orgânicos", correct: true },
+          { text: "Importar alimentos de outros países", correct: false }
+        ]
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    function showQuestion() {
+      const q = questions[currentQuestion];
+      const gameDiv = document.getElementById('game');
+      gameDiv.innerHTML = `<div class="question">${q.text}</div>`;
+      q.options.forEach(option => {
+        const btn = document.createElement('button');
+        btn.textContent = option.text;
+        btn.onclick = () => handleAnswer(option.correct);
+        gameDiv.appendChild(btn);
+      });
+    }
+
+    function handleAnswer(isCorrect) {
+      if (isCorrect) score++;
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        showQuestion();
+      } else {
+        document.getElementById('game').innerHTML = "";
+        document.getElementById('result').textContent =
+          `Você acertou ${score} de ${questions.length} perguntas! 🌎`;
+      }
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
 
