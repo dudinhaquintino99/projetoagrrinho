@@ -1,0 +1,72 @@
+// Configurações do Jogo
+let character = document.getElementById("character");
+let garbage = document.getElementById("garbage");
+let trashcan1 = document.getElementById("trashcan1");
+let trashcan2 = document.getElementById("trashcan2");
+let trashcan3 = document.getElementById("trashcan3");
+
+let gameContainer = document.getElementById("game-container");
+
+let garbageSpeed = 3;
+let gameInterval;
+
+// Função para mover a menina
+function moveCharacter(e) {
+    const characterPosition = character.getBoundingClientRect();
+    const containerWidth = gameContainer.offsetWidth;
+    if (e.key === "ArrowLeft" && characterPosition.left > 0) {
+        character.style.left = `${characterPosition.left - 10}px`;
+    }
+    if (e.key === "ArrowRight" && characterPosition.right < containerWidth) {
+        character.style.left = `${characterPosition.left + 10}px`;
+    }
+}
+
+// Função para movimentar o lixo
+function moveGarbage() {
+    let garbagePosition = garbage.getBoundingClientRect();
+    if (garbagePosition.top >= gameContainer.offsetHeight) {
+        resetGarbage();
+    } else {
+        garbage.style.top = `${garbagePosition.top + garbageSpeed}px`;
+    }
+}
+
+// Função para verificar se o lixo foi colocado no recipiente correto
+function checkCollision() {
+    let garbagePosition = garbage.getBoundingClientRect();
+    let trashcan1Position = trashcan1.getBoundingClientRect();
+    let trashcan2Position = trashcan2.getBoundingClientRect();
+    let trashcan3Position = trashcan3.getBoundingClientRect();
+
+    // Verifica colisão com os recipientes
+    if (isCollision(garbagePosition, trashcan1Position) || isCollision(garbagePosition, trashcan2Position) || isCollision(garbagePosition, trashcan3Position)) {
+        resetGarbage();
+    }
+}
+
+// Função para verificar se há colisão entre dois objetos
+function isCollision(garbagePosition, trashcanPosition) {
+    return !(garbagePosition.right < trashcanPosition.left ||
+             garbagePosition.left > trashcanPosition.right ||
+             garbagePosition.bottom < trashcanPosition.top ||
+             garbagePosition.top > trashcanPosition.bottom);
+}
+
+// Função para resetar a posição do lixo
+function resetGarbage() {
+    garbage.style.top = "-30px";
+    garbage.style.left = `${Math.random() * (gameContainer.offsetWidth - 30)}px`; // Lixo cai em posições aleatórias
+}
+
+// Inicia o jogo
+function startGame() {
+    document.addEventListener("keydown", moveCharacter);
+    gameInterval = setInterval(() => {
+        moveGarbage();
+        checkCollision();
+    }, 20);
+}
+
+// Inicia o jogo assim que a página carrega
+window.onload = startGame;
